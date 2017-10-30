@@ -1,0 +1,31 @@
+{
+  "name": "poe-mod-descriptions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/main.js",
+  "types": "./lib/main.d.ts",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^21.1.5",
+    "jest": "^21.2.1",
+    "ts-jest": "^21.1.4",
+    "typescript": "^2.5.3"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
+  }
+}
