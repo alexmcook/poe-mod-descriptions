@@ -1,3 +1,17 @@
+export interface Translation {
+    ids: string[];
+    descriptions: Description[];
+}
+export interface Description {
+    conditions: Condition[];
+    formats: string[];
+    indexHandlers: string[];
+    text: string;
+}
+export interface Condition {
+    min: number;
+    max: number;
+}
 export interface Mod {
     id: string;
     stats: Stat[];

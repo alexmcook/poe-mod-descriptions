@@ -1,20 +1,20 @@
 import * as _ from 'lodash';
-import * as _translations from '../data/translations.json';
-let translations: Translation[] = <Translation[]> _translations;
+import * as translations_json from '../data/translations.json';
+let translations: Translation[] = <Translation[]> translations_json;
 
-interface Translation {
+export interface Translation {
   ids: string[];
   descriptions: Description[];
 }
 
-interface Description {
+export interface Description {
   conditions: Condition[];
   formats: string[];
   indexHandlers: string[];
   text: string;
 }
 
-interface Condition {
+export interface Condition {
   min: number;
   max: number;
 }
@@ -88,7 +88,7 @@ function mergeValues(stats: Stat[]): number {
 
 function getTranslation(ids: string[], values: number[]): string {
   if (_.isArray(ids)) {
-    let match = _.find(translations, (translation: Translation) => {
+    let match = _.find(translations, (translation) => {
       return _.isEmpty(_.xor(translation.ids, ids));
     });
     if (match !== undefined) {

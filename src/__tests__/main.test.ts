@@ -1,6 +1,6 @@
 import { getDescriptions, Mod } from '../../src/main';
-import * as _mods from '../../data/mods.json';
-let mods: Mod[] = <Mod[]> _mods;
+import * as mods_json from '../../data/mods.json';
+let mods: Mod[] = <Mod[]> mods_json;
 
 it('should provide a description for a single mod', () => {
   let spellDamageWandImplicit = mods[1661];
