@@ -1,7 +1,7 @@
 import { Mod } from '../src/main';
 
 declare module 'mods.json' {
-  export interface JSON {
+  export interface modsJSON {
     [key: number]: Mod;
   }
 }
