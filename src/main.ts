@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
-import * as translations_json from '../data/translations.json';
-let translations: Translation[] = <Translation[]> translations_json;
+import * as translationsJSON from '../data/translations.json';
+let translations: Translation[] = <Translation[]>translationsJSON;
 
 export interface Translation {
   ids: string[];
@@ -88,7 +88,7 @@ function mergeValues(stats: Stat[]): number {
 
 function getTranslation(ids: string[], values: number[]): string {
   if (_.isArray(ids)) {
-    let match = _.find(translations, (translation) => {
+    let match = _.find(translations, translation => {
       return _.isEmpty(_.xor(translation.ids, ids));
     });
     if (match !== undefined) {
@@ -133,7 +133,7 @@ function checkCondition(values: number[], conditions: Condition[]): boolean {
 }
 
 function formatText(description: Description, values: number[]): string {
-  let valueStrings: string[] = _.map(values, (value, index) => {
+  let valueStrings = _.map(values, (value, index) => {
     return applyIndexHandler(value, description.indexHandlers[index]);
   });
   valueStrings = _.map(valueStrings, (value, index) => {
@@ -163,7 +163,7 @@ function formatUnicorn(str: string, ...args: any[]): string {
 }
 
 function applyIndexHandler(value: number, handler: string): string {
-  var valueOut: number | string = value;
+  var valueOut = value;
   switch (handler) {
     case '60%_of_value':
       valueOut = value * 0.6;
@@ -238,7 +238,7 @@ function applyIndexHandler(value: number, handler: string): string {
 }
 
 function applyFormat(value: string, format: string): string {
-  let valueOut: string = value;
+  let valueOut = value;
   switch (format) {
     case '#':
       break;

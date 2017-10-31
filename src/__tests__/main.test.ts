@@ -1,6 +1,6 @@
 import { getDescriptions, Mod } from '../../src/main';
-import * as mods_json from '../../data/mods.json';
-let mods: Mod[] = <Mod[]> mods_json;
+import * as modsJSON from '../../data/mods.json';
+let mods: Mod[] = <Mod[]> modsJSON;
 
 it('should provide a description for a single mod', () => {
   let spellDamageWandImplicit = mods[1661];
@@ -8,7 +8,7 @@ it('should provide a description for a single mod', () => {
     stat.value = stat.valueMax;
   });
 
-  let value: string[] = ['30% increased Spell Damage'];
+  let value = ['30% increased Spell Damage'];
   expect(getDescriptions([spellDamageWandImplicit])).toEqual(value);
 });
 
@@ -18,7 +18,7 @@ it('should provide a description for a single mod that has multiple stats', () =
     stat.value = stat.valueMax;
   });
 
-  let value: string[] = ['Adds 17 to 30 Physical Damage'];
+  let value = ['Adds 17 to 30 Physical Damage'];
   expect(getDescriptions([localAddedPhys])).toEqual(value);
 });
 
@@ -28,7 +28,7 @@ it('should provide descriptions for a single mod that has multiple stats with di
     stat.value = stat.valueMax;
   });
 
-  let value: string[] = ['42% increased Energy Shield', '17% increased Stun and Block Recovery'];
+  let value = ['42% increased Energy Shield', '17% increased Stun and Block Recovery'];
   expect(getDescriptions([hybridESBlock])).toEqual(value);
 });
 
@@ -46,7 +46,7 @@ it('should provide descriptions for multiple mods', () => {
     stat.value = stat.valueMax;
   });
 
-  let value: string[] = ['30% increased Spell Damage', 'Adds 17 to 30 Physical Damage', '42% increased Energy Shield', '17% increased Stun and Block Recovery'];
+  let value = ['30% increased Spell Damage', 'Adds 17 to 30 Physical Damage', '42% increased Energy Shield', '17% increased Stun and Block Recovery'];
   expect(getDescriptions([spellDamageWandImplicit, localAddedPhys, hybridESBlock])).toEqual(value);
 });
 
@@ -60,6 +60,6 @@ it('should provide descriptions for multiple mods that share stats', () => {
     stat.value = stat.valueMax;
   });
 
-  let value: string[] = ['133% increased Energy Shield', '17% increased Stun and Block Recovery'];
+  let value = ['133% increased Energy Shield', '17% increased Stun and Block Recovery'];
   expect(getDescriptions([localPercentES, hybridESBlock])).toEqual(value);
 });
