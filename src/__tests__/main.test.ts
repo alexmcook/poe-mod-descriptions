@@ -63,3 +63,27 @@ it('should provide descriptions for multiple mods that share stats', () => {
   let value = ['133% increased Energy Shield', '17% increased Stun and Block Recovery'];
   expect(getDescriptions([localPercentES, hybridESBlock])).toEqual(value);
 });
+
+it('should provide a description for base_chance_to_freeze_%', () => {
+  let chanceToFreeze = mods.find(mod => {
+    return mod.id === 'ChanceToFreeze1';
+  });
+  chanceToFreeze.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
+
+  let value = ['8% chance to Freeze'];
+  expect(getDescriptions([chanceToFreeze])).toEqual(value);
+});
+
+it('should provide a description for base_chance_to_freeze_% at 100%', () => {
+  let chanceToFreeze = mods.find(mod => {
+    return mod.id === 'ChanceToFreeze1';
+  });
+  chanceToFreeze.stats.forEach(stat => {
+    stat.value = 100;
+  });
+
+  let value = ['Always Freeze'];
+  expect(getDescriptions([chanceToFreeze])).toEqual(value);
+});
