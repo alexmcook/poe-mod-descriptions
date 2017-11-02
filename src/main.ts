@@ -27,7 +27,7 @@ export interface Mod {
 export interface Stat {
   id: string;
   key: number;
-  value: number;
+  value?: number;
   valueMin: number;
   valueMax: number;
 }
@@ -68,7 +68,7 @@ function getText(statGroup: Stat[]): string {
     let values = _.reduce(
       statGroup,
       (result: number[], stat) => {
-        return result.concat(stat.value);
+        return result.concat(<number> stat.value);
       },
       []
     );
@@ -80,7 +80,7 @@ function mergeValues(stats: Stat[]): number {
   return _.reduce(
     stats,
     (result, stat) => {
-      return result + stat.value;
+      return result + <number> stat.value;
     },
     0
   );

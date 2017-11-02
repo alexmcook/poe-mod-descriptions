@@ -1,4 +1,4 @@
 # Testing
 src/
 tests/
-data/mods.json
+data/mods*

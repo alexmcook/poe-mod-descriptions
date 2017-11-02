@@ -19,7 +19,7 @@ export interface Mod {
 export interface Stat {
     id: string;
     key: number;
-    value: number;
+    value?: number;
     valueMin: number;
     valueMax: number;
 }
