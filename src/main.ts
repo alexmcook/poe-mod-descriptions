@@ -43,12 +43,21 @@ export function getDescriptions(mods: Mod[]): string[] {
   let statGroups = _.groupBy(allStats, 'key');
   let output: string[] = [];
   _.each(statGroups, statGroup => {
-    output.push(getText(statGroup));
+    let text = getText(statGroup);
+    if (text) {
+      output.push(text);
+    }
   });
   return output;
 }
 
-function getText(statGroup: Stat[]): string {
+function getText(statGroup: Stat[]): string | undefined {
+  statGroup = _.filter(statGroup, stat => {
+    return stat.id !== 'dummy_stat_display_nothing';
+  });
+  if (statGroup.length === 0) {
+    return;
+  }
   let value: number;
   if (
     _.every(statGroup, stat => {
@@ -68,7 +77,7 @@ function getText(statGroup: Stat[]): string {
     let values = _.reduce(
       statGroup,
       (result: number[], stat) => {
-        return result.concat(<number> stat.value);
+        return result.concat(<number>stat.value);
       },
       []
     );
@@ -80,7 +89,7 @@ function mergeValues(stats: Stat[]): number {
   return _.reduce(
     stats,
     (result, stat) => {
-      return result + <number> stat.value;
+      return result + <number>stat.value;
     },
     0
   );

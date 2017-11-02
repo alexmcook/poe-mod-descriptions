@@ -87,3 +87,15 @@ it('should provide a description for base_chance_to_freeze_% at 100%', () => {
   let value = ['Always Freeze'];
   expect(getDescriptions([chanceToFreeze])).toEqual(value);
 });
+
+it('should skip stats with id dummy_stat_display_nothing', () => {
+  let dummyStat = mods.find(mod => {
+    return mod.id === 'AttackerTakesDamageShieldImplicit11';
+  });
+  dummyStat.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
+
+  let value = ['Reflects 220 Physical Damage to Melee Attackers'];
+  expect(getDescriptions([dummyStat])).toEqual(value);
+});
