@@ -99,3 +99,15 @@ it('should skip stats with id dummy_stat_display_nothing', () => {
   let value = ['Reflects 220 Physical Damage to Melee Attackers'];
   expect(getDescriptions([dummyStat])).toEqual(value);
 });
+
+it('should display horror helm mod', () => {
+  let dummyStat = mods.find(mod => {
+    return mod.id === 'SocketedGemsDealMoreElementalDamageEssence1';
+  });
+  dummyStat.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
+
+  let value = ['Socketed Gems deal 30% more Elemental Damage'];
+  expect(getDescriptions([dummyStat])).toEqual(value);
+});
