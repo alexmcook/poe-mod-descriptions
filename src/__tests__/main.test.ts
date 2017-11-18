@@ -142,3 +142,17 @@ it('crafted should return true for crafted mods', () => {
   ];
   expect(getDescriptions([dummyStat])).toEqual(value);
 });
+
+it('should display chance to flee mods correctly', () => {
+  let dummyStat = mods.find(mod => {
+    return mod.id === 'ChanceToFleeCorrupted';
+  });
+  dummyStat.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
+
+  let value = [
+    { crafted: false, text: '5% chance to Cause Monsters to Flee' }
+  ];
+  expect(getDescriptions([dummyStat])).toEqual(value);
+});
