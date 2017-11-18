@@ -3,9 +3,12 @@ This module provides descriptions for mods
 
 ## Usage
 ```
-import { getDescriptions } from 'poe-mod-descriptions';
+import * as poe from 'poe-mod-descriptions';
 var mods = [mod1, mod2, mod3];
-getDescriptions(mods);
+poe.getDescriptions(mods);
+
+Returns an object containing the text string of the stats and a 
+boolean indicating whether it is a master craft
 ```
 
 ### Requirements
@@ -19,6 +22,7 @@ The data must be of this structure
     "stat1": {
       "id": ...
       "value": ...
+      "key": ...
       ...
     },
     "stat2": {
