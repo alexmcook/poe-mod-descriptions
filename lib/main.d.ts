@@ -23,4 +23,8 @@ export interface Stat {
     valueMin: number;
     valueMax: number;
 }
-export declare function getDescriptions(mods: Mod[]): string[];
+export interface Text {
+    text: string;
+    crafted: boolean;
+}
+export declare function getDescriptions(mods: Mod[]): Text[];
