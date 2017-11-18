@@ -32,7 +32,12 @@ export interface Stat {
   valueMax: number;
 }
 
-export function getDescriptions(mods: Mod[]): string[] {
+export interface Text {
+  text: string;
+  crafted: boolean;
+}
+
+export function getDescriptions(mods: Mod[]): Text[] {
   let allStats = _.reduce(
     mods,
     (result: Stat[], mod) => {
@@ -41,11 +46,11 @@ export function getDescriptions(mods: Mod[]): string[] {
     []
   );
   let statGroups = _.groupBy(allStats, 'key');
-  let output: string[] = [];
+  let output: Text[] = [];
   _.each(statGroups, statGroup => {
     let text = getText(statGroup);
     if (text) {
-      output.push(text);
+      output.push({ text: text, crafted: statGroup[0].key > 10000 ? true : false });
     }
   });
   return output;
