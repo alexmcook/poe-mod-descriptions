@@ -37,7 +37,17 @@ export interface Text {
   crafted: boolean;
 }
 
-export function getDescriptions(mods: Mod[]): Text[] {
+export interface Range {
+  min: number;
+  max: number;
+}
+
+export interface RangeString {
+  min: string;
+  max: string;
+}
+
+export function getDescriptions(mods: Mod[], nullValue?: boolean): Text[] {
   let allStats = _.reduce(
     mods,
     (result: Stat[], mod) => {
@@ -48,15 +58,23 @@ export function getDescriptions(mods: Mod[]): Text[] {
   let statGroups = _.groupBy(allStats, 'key');
   let output: Text[] = [];
   _.each(statGroups, statGroup => {
-    let text = getText(statGroup);
+    if (!_.every(statGroup, stat => {
+      return stat.value !== null;
+    })) {
+      nullValue = true;
+    }
+    let text = getText(statGroup, nullValue);
     if (text) {
-      output.push({ text: text, crafted: statGroup[0].key >= 10000 ? true : false });
+      output.push({
+        text: text,
+        crafted: statGroup[0].key >= 10000 ? true : false
+      });
     }
   });
   return output;
 }
 
-function getText(statGroup: Stat[]): string | undefined {
+function getText(statGroup: Stat[], nullValue?: boolean): string | undefined {
   statGroup = _.filter(statGroup, stat => {
     return stat.id !== 'dummy_stat_display_nothing';
   });
@@ -64,13 +82,20 @@ function getText(statGroup: Stat[]): string | undefined {
     return;
   }
   let value: number;
+  let valueRange: Range;
   if (
     _.every(statGroup, stat => {
       return stat.id === statGroup[0].id;
     })
   ) {
-    value = mergeValues(statGroup);
-    return getTranslation([statGroup[0].id], [value]);
+    if (nullValue) {
+      value = mergeValues(statGroup, true);
+      valueRange = mergeValueRanges(statGroup);
+      return getTranslation([statGroup[0].id], [value], [valueRange]);
+    } else {
+      value = mergeValues(statGroup);
+      return getTranslation([statGroup[0].id], [value]);
+    }
   } else {
     let ids = _.reduce(
       statGroup,
@@ -79,35 +104,77 @@ function getText(statGroup: Stat[]): string | undefined {
       },
       []
     );
-    let values = _.reduce(
-      statGroup,
-      (result: number[], stat) => {
-        return result.concat(<number>stat.value);
-      },
-      []
-    );
-    return getTranslation(ids, values);
+    if (nullValue) {
+      let values = _.reduce(
+        statGroup,
+        (result: number[], stat) => {
+          return result.concat(<number>stat.value);
+        },
+        []
+      );
+      let valueRanges = _.reduce(
+        statGroup,
+        (result: Range[], stat) => {
+          return result.concat({ min: stat.valueMin, max: stat.valueMax });
+        },
+        []
+      );
+      return getTranslation(ids, values, valueRanges);
+    } else {
+      let values = _.reduce(
+        statGroup,
+        (result: number[], stat) => {
+          return result.concat(<number>stat.value);
+        },
+        []
+      );
+      return getTranslation(ids, values);
+    }
   }
 }
 
-function mergeValues(stats: Stat[]): number {
+function mergeValues(stats: Stat[], nullValue?: boolean): number {
   return _.reduce(
     stats,
     (result, stat) => {
-      return result + <number>stat.value;
+      if (nullValue) {
+        return result + stat.valueMax;
+      } else {
+        return result + <number>stat.value;
+      }
     },
     0
   );
 }
 
-function getTranslation(ids: string[], values: number[]): string {
+function mergeValueRanges(stats: Stat[]): Range {
+  return _.reduce(
+    stats,
+    (result, stat) => {
+      result.min += stat.valueMin;
+      result.max += stat.valueMax;
+      return result;
+    },
+    { min: 0, max: 0 }
+  );
+}
+
+function getTranslation(
+  ids: string[],
+  values: number[],
+  valueRanges?: Range[]
+): string {
   if (_.isArray(ids)) {
     let match = _.find(translations, translation => {
       return _.isEmpty(_.xor(translation.ids, ids));
     });
     if (match !== undefined) {
       let description = getDescription(match, values);
-      return formatText(description, values);
+      if (valueRanges) {
+        return formatText(description, valueRanges);
+      } else {
+        return formatText(description, values);
+      }
     } else {
       throw new Error('No translation found for ' + ids);
     }
@@ -117,7 +184,11 @@ function getTranslation(ids: string[], values: number[]): string {
     });
     if (match !== undefined) {
       let description = getDescription(match, values);
-      return formatText(description, values);
+      if (valueRanges) {
+        return formatText(description, valueRanges);
+      } else {
+        return formatText(description, values);
+      }
     } else {
       throw new Error('No translation found for ' + ids);
     }
@@ -146,19 +217,49 @@ function checkCondition(values: number[], conditions: Condition[]): boolean {
   });
 }
 
-function formatText(description: Description, values: number[]): string {
-  let valueStrings = _.map(values, (value, index) => {
-    return applyIndexHandler(value, description.indexHandlers[index]);
-  });
-  valueStrings = _.map(valueStrings, (value, index) => {
-    return applyFormat(
-      value,
-      description.formats[index] === undefined
-        ? description.formats[0]
-        : description.formats[index]
-    );
-  });
-  return formatUnicorn(description.text, valueStrings);
+function formatText(
+  description: Description,
+  values: number[] | Range[]
+): string {
+  if (typeof values[0] === 'number') {
+    values = <number[]>values;
+    let valueStrings = <string[]>_.map(values, (value, index) => {
+      return applyIndexHandler(description.indexHandlers[index], value);
+    });
+    valueStrings = _.map(valueStrings, (value, index) => {
+      return applyFormat(
+        value,
+        description.formats[index] === undefined
+          ? description.formats[0]
+          : description.formats[index]
+      );
+    });
+    return formatUnicorn(description.text, valueStrings);
+  } else {
+    values = <Range[]>values;
+    let valueRanges = <RangeString[]>_.map(values, (value, index) => {
+      return applyIndexHandler(
+        description.indexHandlers[index],
+        value.min,
+        value.max
+      );
+    });
+    let valueStrings = _.map(valueRanges, (value, index) => {
+      let range: string;
+      if (value.min === value.max) {
+        range = value.max;
+      } else {
+        range = '(' + value.min + '-' + value.max + ')';
+      }
+      return applyFormat(
+        range,
+        description.formats[index] === undefined
+          ? description.formats[0]
+          : description.formats[index]
+      );
+    });
+    return formatUnicorn(description.text, valueStrings);
+  }
 }
 
 function formatUnicorn(str: string, ...args: any[]): string {
@@ -176,8 +277,12 @@ function formatUnicorn(str: string, ...args: any[]): string {
   return str;
 }
 
-function applyIndexHandler(value: number, handler: string): string {
-  var valueOut = value;
+function applyIndexHandler(
+  handler: string,
+  value: number,
+  value2?: number
+): string | RangeString {
+  let valueOut = value;
   switch (handler) {
     case '60%_of_value':
       valueOut = value * 0.6;
@@ -248,7 +353,14 @@ function applyIndexHandler(value: number, handler: string): string {
     default:
       break;
   }
-  return valueOut.toString();
+  if (value2) {
+    return {
+      min: valueOut.toString(),
+      max: <string>applyIndexHandler(handler, value2)
+    };
+  } else {
+    return valueOut.toString();
+  }
 }
 
 function applyFormat(value: string, format: string): string {

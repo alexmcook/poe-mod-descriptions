@@ -27,4 +27,12 @@ export interface Text {
     text: string;
     crafted: boolean;
 }
-export declare function getDescriptions(mods: Mod[]): Text[];
+export interface Range {
+    min: number;
+    max: number;
+}
+export interface RangeString {
+    min: string;
+    max: string;
+}
+export declare function getDescriptions(mods: Mod[], nullValue?: boolean): Text[];
