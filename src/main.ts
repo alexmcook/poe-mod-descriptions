@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as translationsJSON from '../data/translations.json';
-let translations: Translation[] = <Translation[]>translationsJSON;
+let translations: Translation[] = translationsJSON as Translation[];
 
 export interface Translation {
   ids: string[];
@@ -47,7 +47,7 @@ export interface RangeString {
   max: string;
 }
 
-export function getDescriptions(mods: Mod[], nullValue?: boolean): Text[] {
+export function getDescriptions(mods: Mod[], noValue?: boolean): Text[] {
   let allStats = _.reduce(
     mods,
     (result: Stat[], mod) => {
@@ -61,9 +61,9 @@ export function getDescriptions(mods: Mod[], nullValue?: boolean): Text[] {
     if (!_.every(statGroup, stat => {
       return stat.value !== null;
     })) {
-      nullValue = true;
+      noValue = true;
     }
-    let text = getText(statGroup, nullValue);
+    let text = getText(statGroup, noValue);
     if (text) {
       output.push({
         text: text,
@@ -74,7 +74,7 @@ export function getDescriptions(mods: Mod[], nullValue?: boolean): Text[] {
   return output;
 }
 
-function getText(statGroup: Stat[], nullValue?: boolean): string | undefined {
+function getText(statGroup: Stat[], noValue?: boolean): string | undefined {
   statGroup = _.filter(statGroup, stat => {
     return stat.id !== 'dummy_stat_display_nothing';
   });
@@ -88,7 +88,7 @@ function getText(statGroup: Stat[], nullValue?: boolean): string | undefined {
       return stat.id === statGroup[0].id;
     })
   ) {
-    if (nullValue) {
+    if (noValue) {
       value = mergeValues(statGroup, true);
       valueRange = mergeValueRanges(statGroup);
       return getTranslation([statGroup[0].id], [value], [valueRange]);
@@ -104,7 +104,7 @@ function getText(statGroup: Stat[], nullValue?: boolean): string | undefined {
       },
       []
     );
-    if (nullValue) {
+    if (noValue) {
       let values = _.reduce(
         statGroup,
         (result: number[], stat) => {
@@ -133,11 +133,11 @@ function getText(statGroup: Stat[], nullValue?: boolean): string | undefined {
   }
 }
 
-function mergeValues(stats: Stat[], nullValue?: boolean): number {
+function mergeValues(stats: Stat[], noValue?: boolean): number {
   return _.reduce(
     stats,
     (result, stat) => {
-      if (nullValue) {
+      if (noValue) {
         return result + stat.valueMax;
       } else {
         return result + <number>stat.value;

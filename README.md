@@ -6,10 +6,8 @@ This module provides descriptions for mods
 import * as poe from 'poe-mod-descriptions';
 var mods = [mod1, mod2, mod3];
 poe.getDescriptions(mods);
-
-Returns an object containing the text string of the stats and a 
-boolean indicating whether it is a master craft
 ```
+Returns an object containing the text string of the stats and a boolean indicating whether it is a master craft. Pass a falsy value as a stat's value to get back a value range (min-max) for a stat's description.
 
 ### Requirements
 The data must be of this structure
@@ -22,6 +20,8 @@ The data must be of this structure
     "stat1": {
       "id": ...
       "value": ...
+      "valueMin": ...
+      "valueMax": ...
       "key": ...
       ...
     },

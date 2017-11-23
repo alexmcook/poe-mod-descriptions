@@ -1,9 +1,11 @@
 import { getDescriptions, Mod } from '../../src/main';
 import * as modsJSON from '../../data/mods.json';
-let mods: Mod[] = <Mod[]>modsJSON;
+let mods: Mod[] = modsJSON as Mod[];
 
 it('should provide a description for a single mod', () => {
-  let spellDamageWandImplicit = mods[1661];
+  let spellDamageWandImplicit = mods.find(mod => {
+    return mod.id === 'SpellDamageOnWeaponImplicitWand11';
+  });
   spellDamageWandImplicit.stats.forEach(stat => {
     stat.value = stat.valueMax;
   });
@@ -13,7 +15,9 @@ it('should provide a description for a single mod', () => {
 });
 
 it('should provide a description for a single mod that has multiple stats', () => {
-  let localAddedPhys = mods[942];
+  let localAddedPhys = mods.find(mod => {
+    return mod.id === 'LocalAddedPhysicalDamage6';
+  });
   localAddedPhys.stats.forEach(stat => {
     stat.value = stat.valueMax;
   });
@@ -23,7 +27,9 @@ it('should provide a description for a single mod that has multiple stats', () =
 });
 
 it('should provide descriptions for a single mod that has multiple stats with different descriptions', () => {
-  let hybridESBlock = mods[1222];
+  let hybridESBlock = mods.find(mod => {
+    return mod.id === 'LocalIncreasedEnergyShieldPercentAndStunRecovery6';
+  });
   hybridESBlock.stats.forEach(stat => {
     stat.value = stat.valueMax;
   });
@@ -36,15 +42,21 @@ it('should provide descriptions for a single mod that has multiple stats with di
 });
 
 it('should provide descriptions for multiple mods', () => {
-  let spellDamageWandImplicit = mods[1661];
+  let spellDamageWandImplicit = mods.find(mod => {
+    return mod.id === 'SpellDamageOnWeaponImplicitWand11';
+  });
   spellDamageWandImplicit.stats.forEach(stat => {
     stat.value = stat.valueMax;
   });
-  let localAddedPhys = mods[942];
+  let localAddedPhys = mods.find(mod => {
+    return mod.id === 'LocalAddedPhysicalDamage6';
+  });
   localAddedPhys.stats.forEach(stat => {
     stat.value = stat.valueMax;
   });
-  let hybridESBlock = mods[1222];
+  let hybridESBlock = mods.find(mod => {
+    return mod.id === 'LocalIncreasedEnergyShieldPercentAndStunRecovery6';
+  });
   hybridESBlock.stats.forEach(stat => {
     stat.value = stat.valueMax;
   });
@@ -61,11 +73,15 @@ it('should provide descriptions for multiple mods', () => {
 });
 
 it('should provide descriptions for multiple mods that share stats', () => {
-  let localPercentES = mods[993];
+  let localPercentES = mods.find(mod => {
+    return mod.id === 'LocalIncreasedEnergyShieldPercent6';
+  });
   localPercentES.stats.forEach(stat => {
     stat.value = stat.valueMax;
   });
-  let hybridESBlock = mods[1222];
+  let hybridESBlock = mods.find(mod => {
+    return mod.id === 'LocalIncreasedEnergyShieldPercentAndStunRecovery6';
+  });
   hybridESBlock.stats.forEach(stat => {
     stat.value = stat.valueMax;
   });
@@ -172,21 +188,27 @@ it('should display a mod with +d% format correctly', () => {
 });
 
 it('[NULL VALUE] should provide a description for a single mod', () => {
-  let spellDamageWandImplicit = mods[1661];
+  let spellDamageWandImplicit = mods.find(mod => {
+    return mod.id === 'SpellDamageOnWeaponImplicitWand11';
+  });
 
   let value = [{ crafted: false, text: '(26-30)% increased Spell Damage' }];
   expect(getDescriptions([spellDamageWandImplicit], true)).toEqual(value);
 });
 
 it('[NULL VALUE] should provide a description for a single mod that has multiple stats', () => {
-  let localAddedPhys = mods[942];
+  let localAddedPhys = mods.find(mod => {
+    return mod.id === 'LocalAddedPhysicalDamage6';
+  });
 
   let value = [{ crafted: false, text: 'Adds (13-17) to (26-30) Physical Damage' }];
   expect(getDescriptions([localAddedPhys], true)).toEqual(value);
 });
 
 it('[NULL VALUE] should provide descriptions for a single mod that has multiple stats with different descriptions', () => {
-  let hybridESBlock = mods[1222];
+  let hybridESBlock = mods.find(mod => {
+    return mod.id === 'LocalIncreasedEnergyShieldPercentAndStunRecovery6';
+  });
 
   let value = [
     { crafted: false, text: '(39-42)% increased Energy Shield' },
@@ -196,9 +218,24 @@ it('[NULL VALUE] should provide descriptions for a single mod that has multiple 
 });
 
 it('[NULL VALUE] should provide descriptions for multiple mods', () => {
-  let spellDamageWandImplicit = mods[1661];
-  let localAddedPhys = mods[942];
-  let hybridESBlock = mods[1222];
+  let spellDamageWandImplicit = mods.find(mod => {
+    return mod.id === 'SpellDamageOnWeaponImplicitWand11';
+  });
+  spellDamageWandImplicit.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
+  let localAddedPhys = mods.find(mod => {
+    return mod.id === 'LocalAddedPhysicalDamage6';
+  });
+  localAddedPhys.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
+  let hybridESBlock = mods.find(mod => {
+    return mod.id === 'LocalIncreasedEnergyShieldPercentAndStunRecovery6';
+  });
+  hybridESBlock.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
 
   let value = [
     { crafted: false, text: '(26-30)% increased Spell Damage' },
@@ -212,8 +249,18 @@ it('[NULL VALUE] should provide descriptions for multiple mods', () => {
 });
 
 it('[NULL VALUE] should provide descriptions for multiple mods that share stats', () => {
-  let localPercentES = mods[993];
-  let hybridESBlock = mods[1222];
+  let localPercentES = mods.find(mod => {
+    return mod.id === 'LocalIncreasedEnergyShieldPercent6';
+  });
+  localPercentES.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
+  let hybridESBlock = mods.find(mod => {
+    return mod.id === 'LocalIncreasedEnergyShieldPercentAndStunRecovery6';
+  });
+  hybridESBlock.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
 
   let value = [
     { crafted: false, text: '(119-133)% increased Energy Shield' },
