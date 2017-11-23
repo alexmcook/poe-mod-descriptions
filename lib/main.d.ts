@@ -35,4 +35,4 @@ export interface RangeString {
     min: string;
     max: string;
 }
-export declare function getDescriptions(mods: Mod[], nullValue?: boolean): Text[];
+export declare function getDescriptions(mods: Mod[], noValue?: boolean): Text[];
