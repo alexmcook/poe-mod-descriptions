@@ -187,6 +187,20 @@ it('should display a mod with +d% format correctly', () => {
   expect(getDescriptions([dummyStat])).toEqual(value);
 });
 
+it('should display a value for local_accuracy_rating_+%', () => {
+  let dummyStat = mods.find(mod => {
+    return mod.id === 'AccuracyPercentImplicitSword1';
+  });
+  dummyStat.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
+
+  let value = [
+    { crafted: false, text: '40% increased Accuracy Rating' }
+  ];
+  expect(getDescriptions([dummyStat])).toEqual(value);
+});
+
 it('[NULL VALUE] should provide a description for a single mod', () => {
   let spellDamageWandImplicit = mods.find(mod => {
     return mod.id === 'SpellDamageOnWeaponImplicitWand11';
