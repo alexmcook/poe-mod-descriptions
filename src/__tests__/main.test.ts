@@ -201,6 +201,21 @@ it('should display a value for local_accuracy_rating_+%', () => {
   expect(getDescriptions([dummyStat])).toEqual(value);
 });
 
+it('should display a value for BleedChanceAndDurationForJewel__', () => {
+  let dummyStat = mods.find(mod => {
+    return mod.id === 'BleedChanceAndDurationForJewel__';
+  });
+  dummyStat.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
+
+  let value = [
+    { crafted: false, text: 'Attacks have 5% chance to cause Bleeding' },
+    { crafted: false, text: '16% increased Bleed duration' }
+  ];
+  expect(getDescriptions([dummyStat])).toEqual(value);
+});
+
 it('[NULL VALUE] should provide a description for a single mod', () => {
   let spellDamageWandImplicit = mods.find(mod => {
     return mod.id === 'SpellDamageOnWeaponImplicitWand11';
