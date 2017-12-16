@@ -230,6 +230,21 @@ it('should display a value for AbyssChanceToGainOnslaughtOnKillJewel1', () => {
   expect(getDescriptions([dummyStat])).toEqual(value);
 });
 
+it('should display a value for ColdDamagePrefixOnWeaponColdPenetrationUber1', () => {
+  let dummyStat = mods.find(mod => {
+    return mod.id === 'ColdDamagePrefixOnWeaponColdPenetrationUber1';
+  });
+  dummyStat.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
+
+  let value = [
+    { crafted: false, text: 'Socketed Gems are Supported by Level 16 Cold Penetration' },
+    { crafted: false, text: '52% increased Cold Damage' }
+  ];
+  expect(getDescriptions([dummyStat])).toEqual(value);
+});
+
 it('[NULL VALUE] should provide a description for a single mod', () => {
   let spellDamageWandImplicit = mods.find(mod => {
     return mod.id === 'SpellDamageOnWeaponImplicitWand11';
