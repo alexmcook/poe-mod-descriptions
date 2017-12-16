@@ -216,6 +216,20 @@ it('should display a value for BleedChanceAndDurationForJewel__', () => {
   expect(getDescriptions([dummyStat])).toEqual(value);
 });
 
+it('should display a value for AbyssChanceToGainOnslaughtOnKillJewel1', () => {
+  let dummyStat = mods.find(mod => {
+    return mod.id === 'AbyssChanceToGainOnslaughtOnKillJewel1';
+  });
+  dummyStat.stats.forEach(stat => {
+    stat.value = stat.valueMax;
+  });
+
+  let value = [
+    { crafted: false, text: '5% chance to gain Onslaught for 4 seconds on Kill' }
+  ];
+  expect(getDescriptions([dummyStat])).toEqual(value);
+});
+
 it('[NULL VALUE] should provide a description for a single mod', () => {
   let spellDamageWandImplicit = mods.find(mod => {
     return mod.id === 'SpellDamageOnWeaponImplicitWand11';
