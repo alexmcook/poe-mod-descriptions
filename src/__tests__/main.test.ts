@@ -211,7 +211,7 @@ it('should display a value for BleedChanceAndDurationForJewel__', () => {
 
   let value = [
     { crafted: false, text: 'Attacks have 5% chance to cause Bleeding' },
-    { crafted: false, text: '16% increased Bleed duration' }
+    { crafted: false, text: '16% increased Bleeding Duration' }
   ];
   expect(getDescriptions([dummyStat])).toEqual(value);
 });
