@@ -401,3 +401,14 @@ it('[NULL VALUE] should display a null value if no value is given', () => {
   ];
   expect(getDescriptions([dummyStat])).toEqual(value);
 });
+
+it('[NULL VALUE] should display a value for AddedColdDamagePerDexterityUber1', () => {
+  let dummyStat = mods.find(mod => {
+    return mod.id === 'AddedColdDamagePerDexterityUber1';
+  });
+
+  let value = [
+    { crafted: false, text: 'Adds (1-2) to (3-4) Cold Damage to Attacks with this Weapon per 10 Dexterity' }
+  ];
+  expect(getDescriptions([dummyStat])).toEqual(value);
+});

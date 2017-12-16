@@ -108,7 +108,7 @@ function getText(statGroup: Stat[], noValue?: boolean): string | undefined {
       let values = _.reduce(
         statGroup,
         (result: number[], stat) => {
-          return result.concat(<number>stat.value);
+          return result.concat(<number>stat.valueMax);
         },
         []
       );
@@ -205,7 +205,7 @@ function getDescription(
   if (match !== undefined) {
     return match;
   } else {
-    throw new Error('No description found for ' + translation + ' ' + values);
+    throw new Error('No description found for ' + translation.ids + ' ' + values);
   }
 }
 
